@@ -3,19 +3,16 @@ using UnityEngine;
 [System.Serializable]
 public struct HexCoordinates
 {
-    public int X { get; private set; }
-    public int Y
-    {
-        get
-        {
-            return -X - Z;
-        }
-    }
-    public int Z { get; private set; }
+    [SerializeField]
+    private int x, z;
+
+    public int X { get { return x; } }
+    public int Y { get { return -X - Z; } }
+    public int Z { get { return z; } }
     public HexCoordinates(int x, int z)
     {
-        X = x;
-        Z = z;
+        this.x = x;
+        this.z = z;
     }
 
     public static HexCoordinates FromOffsetCorrdinates(int x, int z)
