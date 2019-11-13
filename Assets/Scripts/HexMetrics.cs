@@ -17,6 +17,7 @@ public static class HexMetrics
 
     public const float cellPerturbStrength = 5f;
     public const float noiseScale = 0.003f;
+    public const float elevationPerturbStrength = 1.5f;
 
     static Vector3[] corners = {
         new Vector3(0f, 0f, outerRadius),
@@ -30,7 +31,7 @@ public static class HexMetrics
 
     public static Texture2D noiseSource;
 
-    public static Vector4 sampleNoise(Vector3 position)
+    public static Vector4 SampleNoise(Vector3 position)
     {
         return noiseSource.GetPixelBilinear(position.x * noiseScale, position.z * noiseScale);
     }

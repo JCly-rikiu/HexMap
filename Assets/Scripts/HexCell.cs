@@ -20,14 +20,23 @@ public class HexCell : MonoBehaviour
 
             Vector3 position = transform.localPosition;
             position.y = elevation * HexMetrics.elevationStep;
+            position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
             transform.localPosition = position;
 
             Vector3 uiPosition = uiRect.localPosition;
-            uiPosition.z = elevation * -HexMetrics.elevationStep;
+            uiPosition.z = -position.y;
             uiRect.localPosition = uiPosition;
         }
     }
     int elevation;
+
+    public Vector3 Position
+    {
+        get
+        {
+            return transform.localPosition;
+        }
+    }
 
     [SerializeField]
     HexCell[] neighbors;
