@@ -297,9 +297,9 @@ public class HexMesh : MonoBehaviour
     void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
     {
         int vertexIndex = vectrices.Count;
-        vectrices.Add(v1);
-        vectrices.Add(v2);
-        vectrices.Add(v3);
+        vectrices.Add(Perturb(v1));
+        vectrices.Add(Perturb(v2));
+        vectrices.Add(Perturb(v3));
         triangles.Add(vertexIndex);
         triangles.Add(vertexIndex + 1);
         triangles.Add(vertexIndex + 2);
@@ -322,10 +322,10 @@ public class HexMesh : MonoBehaviour
     void AddQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
     {
         int vertexIndex = vectrices.Count;
-        vectrices.Add(v1);
-        vectrices.Add(v2);
-        vectrices.Add(v3);
-        vectrices.Add(v4);
+        vectrices.Add(Perturb(v1));
+        vectrices.Add(Perturb(v2));
+        vectrices.Add(Perturb(v3));
+        vectrices.Add(Perturb(v4));
         triangles.Add(vertexIndex);
         triangles.Add(vertexIndex + 2);
         triangles.Add(vertexIndex + 1);
@@ -348,5 +348,15 @@ public class HexMesh : MonoBehaviour
         colors.Add(c2);
         colors.Add(c3);
         colors.Add(c4);
+    }
+
+    Vector3 Perturb(Vector3 position)
+    {
+        Vector4 sample = HexMetrics.sampleNoise(position);
+        position.x += (sample.x * 2f - 1f) * HexMetrics.cellPerturbStrength;
+        position.y += (sample.y * 2f - 1f) * HexMetrics.cellPerturbStrength;
+        position.z += (sample.z * 2f - 1f) * HexMetrics.cellPerturbStrength;
+
+        return position;
     }
 }
