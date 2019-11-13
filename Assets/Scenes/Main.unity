@@ -215,11 +215,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 6
   height: 6
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
   cellPrefab: {fileID: 1523381797898557272, guid: 662eab6ef542781448049f07b4b0bd4a,
     type: 3}
   cellLabelPrefab: {fileID: 5785009085311405325, guid: f09397ff8a162a14aa2ed98449b03eea,
     type: 3}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  noiseSource: {fileID: 2800000, guid: 2378e06f5e2ca7d4295f49c32f62a8b9, type: 3}
 --- !u!4 &136169940
 Transform:
   m_ObjectHideFlags: 0

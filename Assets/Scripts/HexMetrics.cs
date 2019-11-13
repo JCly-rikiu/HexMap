@@ -25,6 +25,13 @@ public static class HexMetrics
         new Vector3(0f, 0f, outerRadius)
     };
 
+    public static Texture2D noiseSource;
+
+    public static Vector4 sampleNoise(Vector3 position)
+    {
+        return noiseSource.GetPixelBilinear(position.x, position.z);
+    }
+
     public static Vector3 GetFirstCorner(HexDirection direction)
     {
         return corners[(int)direction];
