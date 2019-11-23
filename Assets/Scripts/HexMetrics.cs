@@ -2,8 +2,10 @@ using UnityEngine;
 
 public static class HexMetrics
 {
+    public const float outerToInner = 0.866025404f;
+    public const float innerToOuter = 1f / outerToInner;
     public const float outerRadius = 10f;
-    public const float innerRadius = outerRadius * 0.866025404f;
+    public const float innerRadius = outerRadius * outerToInner;
 
     public const float solidFactor = 0.8f;
     public const float blendFactor = 1f - solidFactor;
@@ -15,7 +17,7 @@ public static class HexMetrics
     public const float horizontalTerraceStepSize = 1f / terraceSteps;
     public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
 
-    public const float cellPerturbStrength = 4f;
+    public const float cellPerturbStrength = 0f; // 4f;
     public const float noiseScale = 0.003f;
     public const float elevationPerturbStrength = 1.5f;
 
@@ -63,6 +65,11 @@ public static class HexMetrics
     public static Vector3 GetBridge(HexDirection direction)
     {
         return (corners[(int)direction] + corners[(int)direction + 1]) * blendFactor;
+    }
+
+    public static Vector3 GetSolidEdgeMiddle(HexDirection direction)
+    {
+        return (corners[(int)direction] + corners[(int)direction + 1]) * (0.5f * solidFactor);
     }
 
     public static Vector3 TerraceLerp(Vector3 a, Vector3 b, int step)
