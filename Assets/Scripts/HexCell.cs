@@ -125,9 +125,12 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    public bool HasRiverThroughEdge(HexDirection direction)
+    public float StreamBedY
     {
-        return hasIncomingRiver && incomingRiver == direction || hasOutgoingRiver && outgoingRiver == direction;
+        get
+        {
+            return (elevation + HexMetrics.streamBedElevationOffset) * HexMetrics.elevationStep;
+        }
     }
 
     [SerializeField]
@@ -173,6 +176,11 @@ public class HexCell : MonoBehaviour
     void RefreshSelfOnly()
     {
         chunk.Refresh();
+    }
+
+    public bool HasRiverThroughEdge(HexDirection direction)
+    {
+        return hasIncomingRiver && incomingRiver == direction || hasOutgoingRiver && outgoingRiver == direction;
     }
 
     public void RemoveOutgoingRiver()

@@ -19,6 +19,8 @@ public static class HexMetrics
     public const float noiseScale = 0.003f;
     public const float elevationPerturbStrength = 1.5f;
 
+    public const float streamBedElevationOffset = -1f;
+
     public const int chunkSizeX = 5, chunkSizeZ = 5;
 
     static Vector3[] corners = {
