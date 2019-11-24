@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -532,7 +532,7 @@ MonoBehaviour:
     type: 3}
   cellLabelPrefab: {fileID: 5785009085311405325, guid: f09397ff8a162a14aa2ed98449b03eea,
     type: 3}
-  chunkPrefab: {fileID: 1715035061693884551, guid: b66aaccfdcc7b8c48b782dd968edf8ca,
+  chunkPrefab: {fileID: 1401437182501070947, guid: b80bcc888f356804ebf580cda85aceb6,
     type: 3}
   noiseSource: {fileID: 2800000, guid: 2378e06f5e2ca7d4295f49c32f62a8b9, type: 3}
 --- !u!4 &136169940
