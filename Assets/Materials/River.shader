@@ -34,22 +34,22 @@
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
         // #pragma instancing_options assumeuniformscaling
         UNITY_INSTANCING_BUFFER_START(Props)
-        // put more per-instance properties here
+            // put more per-instance properties here
         UNITY_INSTANCING_BUFFER_END(Props)
 
-        void surf(Input IN, inout SurfaceOutputStandard o)
+        void surf (Input IN, inout SurfaceOutputStandard o)
         {
             float2 uv = IN.uv_MainTex;
             uv.x = uv.x * 0.0625 + _Time.y * 0.005;
             uv.y -= _Time.y * 0.25;
-            fixed4 noise = tex2D(_MainTex, uv);
+            fixed4 noise = tex2D (_MainTex, uv);
 
             float2 uv2 = IN.uv_MainTex;
             uv2.x = uv2.x * 0.0625 - _Time.y * 0.0052;
             uv2.y -= _Time.y * 0.23;
-            float4 noise2 = tex2D(_MainTex, uv2);
+            float4 noise2 = tex2D (_MainTex, uv2);
 
-            fixed4 c = saturate(_Color + noise.r * noise2.a);
+            fixed4 c = saturate (_Color + noise.r * noise2.a);
             o.Albedo = c.rgb;
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
