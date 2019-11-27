@@ -625,7 +625,7 @@ MonoBehaviour:
     type: 3}
   cellLabelPrefab: {fileID: 5785009085311405325, guid: f09397ff8a162a14aa2ed98449b03eea,
     type: 3}
-  chunkPrefab: {fileID: 1401437182501070947, guid: b80bcc888f356804ebf580cda85aceb6,
+  chunkPrefab: {fileID: 894903870319188659, guid: b80bcc888f356804ebf580cda85aceb6,
     type: 3}
   noiseSource: {fileID: 2800000, guid: 2378e06f5e2ca7d4295f49c32f62a8b9, type: 3}
 --- !u!4 &136169940
@@ -5164,7 +5164,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5348,9 +5348,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexGrid: {fileID: 136169939}
   colors:
-  - {r: 1, g: 0.97917986, b: 0, a: 0}
-  - {r: 0, g: 1, b: 0, a: 0}
-  - {r: 0, g: 0, b: 1, a: 0}
+  - {r: 1, g: 0.8627451, b: 0, a: 1}
+  - {r: 0.003921569, g: 0.68235296, b: 0.03137255, a: 1}
+  - {r: 0.07450981, g: 0.21960784, b: 0.8392157, a: 1}
+  - {r: 1, g: 0.30588236, b: 0.105882354, a: 1}
   - {r: 1, g: 1, b: 1, a: 0}
 --- !u!114 &1744288219
 MonoBehaviour:
