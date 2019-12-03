@@ -625,7 +625,7 @@ MonoBehaviour:
     type: 3}
   cellLabelPrefab: {fileID: 5785009085311405325, guid: f09397ff8a162a14aa2ed98449b03eea,
     type: 3}
-  chunkPrefab: {fileID: 245850373617992709, guid: b80bcc888f356804ebf580cda85aceb6,
+  chunkPrefab: {fileID: 3727660750695202807, guid: b80bcc888f356804ebf580cda85aceb6,
     type: 3}
   noiseSource: {fileID: 2800000, guid: 2378e06f5e2ca7d4295f49c32f62a8b9, type: 3}
 --- !u!4 &136169940
