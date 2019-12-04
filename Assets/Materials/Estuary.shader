@@ -50,16 +50,16 @@
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             float shore = IN.uv_MainTex.y;
-            float foam = Foam (shore, IN.worldPos.xz, _MainTex);
-            float waves = Waves (IN.worldPos.xz, _MainTex);
+            float foam = Foam(shore, IN.worldPos.xz, _MainTex);
+            float waves = Waves(IN.worldPos.xz, _MainTex);
             waves *= 1 - shore;
-            float shoreWater = max (foam, waves);
+            float shoreWater = max(foam, waves);
 
-            float river = River (IN.riverUV, _MainTex);
+            float river = River(IN.riverUV, _MainTex);
 
-            float water = lerp (shoreWater, river, IN.uv_MainTex.x);
+            float water = lerp(shoreWater, river, IN.uv_MainTex.x);
 
-            fixed4 c = saturate (_Color + water);
+            fixed4 c = saturate(_Color + water);
             o.Albedo = c.rgb;
             // Metallic and smoothness come from slider variables
             o.Metallic = _Metallic;

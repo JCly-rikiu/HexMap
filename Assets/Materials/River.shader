@@ -41,9 +41,9 @@
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            float river = River (IN.uv_MainTex, _MainTex);
+            float river = River(IN.uv_MainTex, _MainTex);
 
-            fixed4 c = saturate (_Color + river);
+            fixed4 c = saturate(_Color + river);
             o.Albedo = c.rgb;
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;

@@ -46,11 +46,11 @@
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             // Albedo comes from a texture tinted by color
-            float4 noise = tex2D (_MainTex, IN.worldPos.xz * 0.025);
+            float4 noise = tex2D(_MainTex, IN.worldPos.xz * 0.025);
             fixed4 c =_Color * (noise.y * 0.25 + 0.75);
             float blend = IN.uv_MainTex.x;
             blend *= noise.x + 0.5;
-            blend = smoothstep (0.4, 0.7, blend);
+            blend = smoothstep(0.4, 0.7, blend);
 
             o.Albedo = c.rgb;
             // Metallic and smoothness come from slider variables
