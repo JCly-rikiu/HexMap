@@ -44,6 +44,12 @@ public static class HexMetrics
 
     public static Texture2D noiseSource;
 
+    static float[][] featureThresholds = {
+        new float[] {0.0f, 0.0f, 0.4f},
+        new float[] {0.0f, 0.4f, 0.6f},
+        new float[] {0.4f, 0.6f, 0.8f}
+    };
+
     public static Vector4 SampleNoise(Vector3 position)
     {
         return noiseSource.GetPixelBilinear(position.x * noiseScale, position.z * noiseScale);
@@ -160,5 +166,10 @@ public static class HexMetrics
             z += hashGridSize;
         }
         return hashGrid[x + z * hashGridSize];
+    }
+
+    public static float[] GetFeatureThresholds(int level)
+    {
+        return featureThresholds[level];
     }
 }
