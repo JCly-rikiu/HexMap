@@ -206,6 +206,24 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    public int UrbanLevel
+    {
+        get
+        {
+            return urbanLevel;
+        }
+        set
+        {
+            if (urbanLevel != value)
+            {
+                urbanLevel = value;
+                RefreshSelfOnly();
+            }
+        }
+    }
+
+    int urbanLevel;
+
     void Refresh()
     {
         if (chunk)
