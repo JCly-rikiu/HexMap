@@ -160,8 +160,11 @@ public class HexGridChunk : MonoBehaviour
         bridge.y = neighbor.Position.y - cell.Position.y;
         EdgeVertices e2 = new EdgeVertices(e1.v1 + bridge, e1.v5 + bridge);
 
+        bool hasRiver = cell.HasRiverThroughEdge(direction);
+        bool hasRoad = cell.HasRoadThroughEdge(direction);
+
         // River through edge
-        if (cell.HasRiverThroughEdge(direction))
+        if (hasRiver)
         {
             e2.v3.y = neighbor.StreamBedY;
 
@@ -185,14 +188,14 @@ public class HexGridChunk : MonoBehaviour
         // Edge
         if (cell.GetEdgeType(direction) == HexEdgeType.Slope)
         {
-            TriangulateEdgeTerraces(e1, cell, e2, neighbor, cell.HasRoadThroughEdge(direction));
+            TriangulateEdgeTerraces(e1, cell, e2, neighbor, hasRoad);
         }
         else
         {
-            TriangulateEdgeStrip(e1, cell.Color, e2, neighbor.Color, cell.HasRoadThroughEdge(direction));
+            TriangulateEdgeStrip(e1, cell.Color, e2, neighbor.Color, hasRoad);
         }
 
-        features.AddWall(e1, cell, e2, neighbor);
+        features.AddWall(e1, cell, e2, neighbor, hasRiver, hasRoad);
 
         // Corner v2(cell), v4(neighbor), v5(nextNeighbor)
         HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
