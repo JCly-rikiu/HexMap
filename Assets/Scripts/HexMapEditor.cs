@@ -21,7 +21,7 @@ public class HexMapEditor : MonoBehaviour
         Ignore, Yes, No
     }
 
-    OptionalToggle riverMode, roadMode;
+    OptionalToggle riverMode, roadMode, walledMode;
 
     bool isDrag;
     HexDirection dragDirection;
@@ -132,6 +132,10 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.RemoveRoads();
             }
+            if (walledMode != OptionalToggle.Ignore)
+            {
+                cell.Walled = walledMode == OptionalToggle.Yes;
+            }
             if (isDrag)
             {
                 HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
@@ -179,21 +183,6 @@ public class HexMapEditor : MonoBehaviour
         activeWaterLevel = (int)level;
     }
 
-    public void SetRiverMode(int mode)
-    {
-        riverMode = (OptionalToggle)mode;
-    }
-
-    public void SetRoadMode(int mode)
-    {
-        roadMode = (OptionalToggle)mode;
-    }
-
-    public void SetBrushSize(float size)
-    {
-        brushSize = (int)size;
-    }
-
     public void SetApplyUrbanLevel(bool toggle)
     {
         applyUrbanLevel = toggle;
@@ -222,6 +211,26 @@ public class HexMapEditor : MonoBehaviour
     public void SetPlantLevel(float level)
     {
         activePlantLevel = (int)level;
+    }
+
+    public void SetRiverMode(int mode)
+    {
+        riverMode = (OptionalToggle)mode;
+    }
+
+    public void SetRoadMode(int mode)
+    {
+        roadMode = (OptionalToggle)mode;
+    }
+
+    public void SetWalledMode(int mode)
+    {
+        walledMode = (OptionalToggle)mode;
+    }
+
+    public void SetBrushSize(float size)
+    {
+        brushSize = (int)size;
     }
 
     public void ShowUI(bool visible)
