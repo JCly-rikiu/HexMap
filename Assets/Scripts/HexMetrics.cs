@@ -32,6 +32,8 @@ public static class HexMetrics
     public const float wallElevationOffset = verticalTerraceStepSize;
     public const float wallTowerThreshold = 0.5f;
 
+    public const float bridgeDesignLength = 7f;
+
     public const int chunkSizeX = 5, chunkSizeZ = 5;
 
     public const int hashGridSize = 256;
