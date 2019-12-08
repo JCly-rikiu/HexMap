@@ -57,20 +57,25 @@ public class HexCell : MonoBehaviour
     {
         get
         {
-            return color;
+            return HexMetrics.colors[terrainTypeIndex];
+        }
+    }
+    public int TerrainTypeIndex
+    {
+        get
+        {
+            return terrainTypeIndex;
         }
         set
         {
-            if (color == value)
+            if (terrainTypeIndex != value)
             {
-                return;
+                terrainTypeIndex = value;
+                Refresh();
             }
-
-            color = value;
-            Refresh();
         }
     }
-    Color color;
+    int terrainTypeIndex;
 
     public Vector3 Position
     {
