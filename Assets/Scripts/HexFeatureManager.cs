@@ -6,6 +6,8 @@ public class HexFeatureManager : MonoBehaviour
 
     public HexMesh walls;
 
+    public Transform wallTower;
+
     Transform container;
 
     public void Clear()
@@ -140,7 +142,7 @@ public class HexFeatureManager : MonoBehaviour
         }
     }
 
-    void AddWallSegment(Vector3 nearLeft, Vector3 farLeft, Vector3 nearRight, Vector3 farRight)
+    void AddWallSegment(Vector3 nearLeft, Vector3 farLeft, Vector3 nearRight, Vector3 farRight, bool addTower = false)
     {
         nearLeft = HexMetrics.Perturb(nearLeft);
         farLeft = HexMetrics.Perturb(farLeft);
@@ -174,6 +176,16 @@ public class HexFeatureManager : MonoBehaviour
 
         // wall tops
         walls.AddQuadUnperturbed(t1, t2, v3, v4);
+
+        if (addTower)
+        {
+            Transform towerInstance = Instantiate(wallTower);
+            towerInstance.transform.localPosition = (left + right) * 0.5f;
+            Vector3 rightDirection = right - left;
+            rightDirection.y = 0f;
+            towerInstance.transform.right = rightDirection;
+            towerInstance.SetParent(container, false);
+        }
     }
 
     void AddWallSegment(Vector3 pivot, HexCell pivotCell, Vector3 left, HexCell leftCell, Vector3 right, HexCell rightCell)
@@ -190,7 +202,13 @@ public class HexFeatureManager : MonoBehaviour
         {
             if (hasRightWall)
             {
-                AddWallSegment(pivot, left, pivot, right);
+                bool hasTower = false;
+                if (leftCell.Elevation == rightCell.Elevation)
+                {
+                    HexHash hash = HexMetrics.SampleHashGrid((pivot + left + right) * (1f / 3f));
+                    hasTower = hash.e < HexMetrics.wallTowerThreshold;
+                }
+                AddWallSegment(pivot, left, pivot, right, hasTower);
             }
             else if (leftCell.Elevation < rightCell.Elevation)
             {
