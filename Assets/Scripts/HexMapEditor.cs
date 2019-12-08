@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.IO;
 
 public class HexMapEditor : MonoBehaviour
 {
@@ -253,5 +254,23 @@ public class HexMapEditor : MonoBehaviour
     public void SetWalledMode(int mode)
     {
         walledMode = (OptionalToggle)mode;
+    }
+
+    public void Save()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "test.map");
+        using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.Create)))
+        {
+            writer.Write(123);
+        }
+    }
+
+    public void Load()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "test.map");
+        using (BinaryReader reader = new BinaryReader(File.OpenRead(path)))
+        {
+            Debug.Log(reader.ReadInt32());
+        }
     }
 }
