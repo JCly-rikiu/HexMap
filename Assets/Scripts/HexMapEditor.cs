@@ -13,8 +13,8 @@ public class HexMapEditor : MonoBehaviour
     bool applyWaterLevel = true;
     int activeWaterLevel;
     int brushSize;
-    bool applyUrbanLevel, applyFarmLevel, applyPlantLevel;
-    int activeUrbanLevel, activeFarmLevel, activePlantLevel;
+    bool applyUrbanLevel, applyFarmLevel, applyPlantLevel, applySpecialIndex;
+    int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
 
     enum OptionalToggle
     {
@@ -124,6 +124,11 @@ public class HexMapEditor : MonoBehaviour
                 cell.PlantLevel = activePlantLevel;
             }
 
+            if (applySpecialIndex)
+            {
+                cell.SpecialIndex = activeSpecialIndex;
+            }
+
             if (riverMode == OptionalToggle.No)
             {
                 cell.RemoveRiver();
@@ -154,6 +159,19 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
+    void ValidateDrag(HexCell currentCell)
+    {
+        for (dragDirection = HexDirection.NE; dragDirection <= HexDirection.NW; dragDirection++)
+        {
+            if (previousCell.GetNeighbor(dragDirection) == currentCell)
+            {
+                isDrag = true;
+                return;
+            }
+        }
+        isDrag = false;
+    }
+
     public void SelectColor(int index)
     {
         applyColor = index >= 0;
@@ -181,6 +199,26 @@ public class HexMapEditor : MonoBehaviour
     public void SetWaterLevel(float level)
     {
         activeWaterLevel = (int)level;
+    }
+
+    public void SetRiverMode(int mode)
+    {
+        riverMode = (OptionalToggle)mode;
+    }
+
+    public void SetRoadMode(int mode)
+    {
+        roadMode = (OptionalToggle)mode;
+    }
+
+    public void SetBrushSize(float size)
+    {
+        brushSize = (int)size;
+    }
+
+    public void ShowUI(bool visible)
+    {
+        hexGrid.ShowUI(visible);
     }
 
     public void SetApplyUrbanLevel(bool toggle)
@@ -213,41 +251,18 @@ public class HexMapEditor : MonoBehaviour
         activePlantLevel = (int)level;
     }
 
-    public void SetRiverMode(int mode)
+    public void SetApplySpecialIndex(bool toggle)
     {
-        riverMode = (OptionalToggle)mode;
+        applySpecialIndex = toggle;
     }
 
-    public void SetRoadMode(int mode)
+    public void SetSpecialIndex(float index)
     {
-        roadMode = (OptionalToggle)mode;
+        activeSpecialIndex = (int)index;
     }
 
     public void SetWalledMode(int mode)
     {
         walledMode = (OptionalToggle)mode;
-    }
-
-    public void SetBrushSize(float size)
-    {
-        brushSize = (int)size;
-    }
-
-    public void ShowUI(bool visible)
-    {
-        hexGrid.ShowUI(visible);
-    }
-
-    void ValidateDrag(HexCell currentCell)
-    {
-        for (dragDirection = HexDirection.NE; dragDirection <= HexDirection.NW; dragDirection++)
-        {
-            if (previousCell.GetNeighbor(dragDirection) == currentCell)
-            {
-                isDrag = true;
-                return;
-            }
-        }
-        isDrag = false;
     }
 }
