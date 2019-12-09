@@ -1080,7 +1080,7 @@ MonoBehaviour:
     type: 3}
   cellLabelPrefab: {fileID: 5785009085311405325, guid: f09397ff8a162a14aa2ed98449b03eea,
     type: 3}
-  chunkPrefab: {fileID: 4999952331071132057, guid: b21999503d888504caa5f248ef4530de,
+  chunkPrefab: {fileID: 1710803884342301618, guid: b21999503d888504caa5f248ef4530de,
     type: 3}
   noiseSource: {fileID: 2800000, guid: 2378e06f5e2ca7d4295f49c32f62a8b9, type: 3}
   colors:
@@ -1269,6 +1269,7 @@ MonoBehaviour:
   useColors: 0
   useUVCoordinates: 0
   useUV2Coordinates: 0
+  useTerrainTypes: 0
 --- !u!23 &172526759
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2582,7 +2583,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ye
+  m_Text: Snd
 --- !u!222 &318809834
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4472,7 +4473,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Gr
+  m_Text: Grs
 --- !u!222 &603484616
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13114,7 +13115,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Wh
+  m_Text: Sw
 --- !u!222 &1864181993
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14473,7 +14474,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Bl
+  m_Text: Md
 --- !u!222 &2102186645
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14550,7 +14551,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Or
+  m_Text: Stn
 --- !u!222 &2103614493
 CanvasRenderer:
   m_ObjectHideFlags: 0
