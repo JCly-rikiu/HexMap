@@ -4,8 +4,8 @@ using System.IO;
 
 public class HexGrid : MonoBehaviour
 {
-    public int chunkCountX = 4, chunkCountZ = 3;
-    int cellCountX, cellCountZ;
+    public int cellCountX = 20, cellCountZ = 15;
+    int chunkCountX, chunkCountZ;
 
     public HexCell cellPrefab;
     public Text cellLabelPrefab;
@@ -26,11 +26,7 @@ public class HexGrid : MonoBehaviour
         HexMetrics.InitializeHashGrid(seed);
         HexMetrics.colors = colors;
 
-        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
-        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
-
-        CreateChunks();
-        CreateCells();
+        CreateMap(cellCountX, cellCountZ);
     }
 
     void onEnable()
@@ -41,6 +37,31 @@ public class HexGrid : MonoBehaviour
             HexMetrics.InitializeHashGrid(seed);
             HexMetrics.colors = colors;
         }
+    }
+
+    public void CreateMap(int x, int z)
+    {
+        if (x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0)
+        {
+            Debug.LogError("Unsupported map size.");
+            return;
+        }
+
+        if (chunks != null)
+        {
+            for (int i = 0; i < chunks.Length; i++)
+            {
+                Destroy(chunks[i].gameObject);
+            }
+        }
+
+        cellCountX = x;
+        cellCountZ = z;
+        chunkCountX = cellCountX / HexMetrics.chunkSizeX;
+        chunkCountZ = cellCountZ / HexMetrics.chunkSizeZ;
+
+        CreateChunks();
+        CreateCells();
     }
 
     void CreateChunks()
