@@ -502,7 +502,7 @@ public class HexCell : MonoBehaviour
                 roadFlags |= 1 << i;
             }
         }
-        writer.Write(roadFlags);
+        writer.Write((byte)roadFlags);
     }
 
     public void Load(BinaryReader reader)
