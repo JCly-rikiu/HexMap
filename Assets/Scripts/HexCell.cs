@@ -173,7 +173,6 @@ public class HexCell : MonoBehaviour
         }
     }
     int waterLevel;
-
     public bool IsUnderwater
     {
         get
@@ -271,7 +270,6 @@ public class HexCell : MonoBehaviour
         }
     }
     int specialIndex;
-
     public bool IsSpecial
     {
         get
@@ -293,8 +291,15 @@ public class HexCell : MonoBehaviour
         }
     }
     int distance;
-
     public HexCell PathFrom { get; set; }
+    public int SearchHeuristic { get; set; }
+    public int SearchPriority
+    {
+        get
+        {
+            return distance + SearchHeuristic;
+        }
+    }
 
     void Refresh()
     {
