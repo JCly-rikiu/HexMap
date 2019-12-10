@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 
 public class HexCell : MonoBehaviour
@@ -279,6 +280,20 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    public int Distance
+    {
+        get
+        {
+            return distance;
+        }
+        set
+        {
+            distance = value;
+            UpdateDistanceLable();
+        }
+    }
+    int distance;
+
     void Refresh()
     {
         if (chunk)
@@ -536,5 +551,11 @@ public class HexCell : MonoBehaviour
         {
             roads[i] = (roadFlags & (1 << i)) != 0;
         }
+    }
+
+    void UpdateDistanceLable()
+    {
+        Text label = uiRect.GetComponent<Text>();
+        label.text = distance.ToString();
     }
 }
