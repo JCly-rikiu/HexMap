@@ -6,6 +6,8 @@ public class HexMapEditor : MonoBehaviour
 {
     public HexGrid hexGrid;
 
+    public Material terrainMaterial;
+
     int activeTerrainTypeIndex;
     bool applyElevation = true;
     int activeElevation;
@@ -25,6 +27,11 @@ public class HexMapEditor : MonoBehaviour
     bool isDrag;
     HexDirection dragDirection;
     HexCell previousCell;
+
+    void Awake()
+    {
+        terrainMaterial.DisableKeyword("GRID_ON");
+    }
 
     void Update()
     {
@@ -254,5 +261,17 @@ public class HexMapEditor : MonoBehaviour
     public void SetWalledMode(int mode)
     {
         walledMode = (OptionalToggle)mode;
+    }
+
+    public void ShowGrid(bool visible)
+    {
+        if (visible)
+        {
+            terrainMaterial.EnableKeyword("GRID_ON");
+        }
+        else
+        {
+            terrainMaterial.DisableKeyword("GRID_ON");
+        }
     }
 }

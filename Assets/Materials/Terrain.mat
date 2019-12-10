@@ -39,6 +39,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _GridTex:
+        m_Texture: {fileID: 2800000, guid: 6323cb19b63629c4da333d1786bd4597, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 18700000, guid: 0d517f3bcb5097145b136b7c2ca65437, type: 2}
         m_Scale: {x: 1, y: 1}
