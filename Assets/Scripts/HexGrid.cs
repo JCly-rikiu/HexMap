@@ -126,7 +126,6 @@ public class HexGrid : MonoBehaviour
 
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-        label.text = cell.coordinates.ToStringOnSeparateLines();
         cell.uiRect = label.rectTransform;
 
         cell.Elevation = 0;
