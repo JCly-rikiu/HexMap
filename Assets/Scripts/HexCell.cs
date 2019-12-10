@@ -294,6 +294,8 @@ public class HexCell : MonoBehaviour
     }
     int distance;
 
+    public HexCell PathFrom { get; set; }
+
     void Refresh()
     {
         if (chunk)
