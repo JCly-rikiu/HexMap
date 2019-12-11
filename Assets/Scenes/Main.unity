@@ -1082,6 +1082,8 @@ MonoBehaviour:
     type: 3}
   chunkPrefab: {fileID: 1710803884342301618, guid: b21999503d888504caa5f248ef4530de,
     type: 3}
+  unitPrefab: {fileID: 5178149514762037918, guid: 6a5aa262421425049ad5d1c496843152,
+    type: 3}
   noiseSource: {fileID: 2800000, guid: 2378e06f5e2ca7d4295f49c32f62a8b9, type: 3}
   seed: 1234
 --- !u!4 &136169940
