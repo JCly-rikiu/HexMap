@@ -287,7 +287,6 @@ public class HexCell : MonoBehaviour
         set
         {
             distance = value;
-            UpdateDistanceLable();
         }
     }
     int distance;
@@ -561,12 +560,6 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    void UpdateDistanceLable()
-    {
-        Text label = uiRect.GetComponent<Text>();
-        label.text = distance == int.MaxValue ? "" : distance.ToString();
-    }
-
     public void DisableHighlight()
     {
         Image highlight = uiRect.GetChild(0).GetComponent<Image>();
@@ -578,5 +571,11 @@ public class HexCell : MonoBehaviour
         Image highlight = uiRect.GetChild(0).GetComponent<Image>();
         highlight.color = color;
         highlight.enabled = true;
+    }
+
+    public void SetLabel(string text)
+    {
+        UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
+        label.text = text;
     }
 }
