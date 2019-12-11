@@ -16,6 +16,8 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     bool[] roads;
 
+    public HexUnit Unit { get; set; }
+
     public int Elevation
     {
         get
@@ -315,12 +317,22 @@ public class HexCell : MonoBehaviour
                     neighbor.chunk.Refresh();
                 }
             }
+
+            if (Unit)
+            {
+                Unit.ValidateLocation();
+            }
         }
     }
 
     void RefreshSelfOnly()
     {
         chunk.Refresh();
+
+        if (Unit)
+        {
+            Unit.ValidateLocation();
+        }
     }
 
     void RefreshPosition()

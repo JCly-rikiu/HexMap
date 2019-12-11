@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028377, g: 0.22571409, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -12593,6 +12593,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexGrid: {fileID: 136169939}
   terrainMaterial: {fileID: 2100000, guid: 67eec36bddacf3a4f8dc0df677e0973c, type: 2}
+  unitPrefab: {fileID: 5178149514762037918, guid: 6a5aa262421425049ad5d1c496843152,
+    type: 3}
 --- !u!114 &1744288219
 MonoBehaviour:
   m_ObjectHideFlags: 0
