@@ -300,6 +300,7 @@ public class HexCell : MonoBehaviour
         }
     }
     public HexCell NextWithSamePriority { get; set; }
+    public int SearchPhase { get; set; }
 
     void Refresh()
     {
