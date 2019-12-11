@@ -26,6 +26,13 @@ public class HexGrid : MonoBehaviour
     int searchFrontierPhase;
 
     HexCell currentPathFrom, currentPathTo;
+    public bool HasPath
+    {
+        get
+        {
+            return currentPathExists;
+        }
+    }
     bool currentPathExists;
 
     void Awake()
@@ -177,6 +184,16 @@ public class HexGrid : MonoBehaviour
         return cells[x + z * cellCountX];
     }
 
+    public HexCell GetCell(Ray ray)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            return GetCell(hit.point);
+        }
+        return null;
+    }
+
     public void ShowUI(bool visible)
     {
         for (int i = 0; i < chunks.Length; i++)
@@ -289,7 +306,7 @@ public class HexGrid : MonoBehaviour
                 }
 
                 // skip unreachable cells
-                if (neighbor.IsUnderwater)
+                if (neighbor.IsUnderwater || neighbor.Unit)
                 {
                     continue;
                 }
@@ -362,7 +379,7 @@ public class HexGrid : MonoBehaviour
         currentPathTo.EnableHighlight(Color.red);
     }
 
-    void ClearPath()
+    public void ClearPath()
     {
         if (currentPathExists)
         {
