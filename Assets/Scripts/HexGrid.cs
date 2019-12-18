@@ -264,19 +264,20 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public void FindPath(HexCell fromCell, HexCell toCell, int speed)
+    public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
         ClearPath();
         currentPathFrom = fromCell;
         currentPathTo = toCell;
-        currentPathExists = Search(fromCell, toCell, speed);
-        ShowPath(speed);
+        currentPathExists = Search(fromCell, toCell, unit);
+        ShowPath(unit.Speed);
     }
 
-    bool Search(HexCell fromCell, HexCell toCell, int speed)
+    bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
-        searchFrontierPhase += 2;
+        int speed = unit.Speed;
 
+        searchFrontierPhase += 2;
         if (searchFrontier == null)
         {
             searchFrontier = new HexCellPriorityQueue();
@@ -312,30 +313,16 @@ public class HexGrid : MonoBehaviour
                 }
 
                 // skip unreachable cells
-                if (neighbor.IsUnderwater || neighbor.Unit)
-                {
-                    continue;
-                }
-                HexEdgeType edgeType = current.GetEdgeType(neighbor);
-                if (edgeType == HexEdgeType.Cliff)
+                if (!unit.IsValidDestination(neighbor))
                 {
                     continue;
                 }
 
                 // calculate movement cost
-                int moveCost;
-                if (current.HasRoadThroughEdge(d))
-                {
-                    moveCost = 1;
-                }
-                else if (current.Walled != neighbor.Walled)
+                int moveCost = unit.GetMoveCost(current, neighbor, d);
+                if (moveCost < 0)
                 {
                     continue;
-                }
-                else
-                {
-                    moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
-                    moveCost += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
                 }
 
                 // update distance
