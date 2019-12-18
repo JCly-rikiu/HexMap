@@ -246,7 +246,7 @@ public class HexGrid : MonoBehaviour
 
         for (int i = 0; i < cells.Length; i++)
         {
-            cells[i].Load(reader);
+            cells[i].Load(reader, header);
         }
 
         for (int i = 0; i < chunks.Length; i++)
