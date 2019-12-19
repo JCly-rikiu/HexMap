@@ -128,6 +128,8 @@ public class HexGrid : MonoBehaviour
         cell.Index = i;
         cell.ShaderData = cellShaderData;
 
+        cell.Explorable = x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
+
         if (x > 0)
         {
             cell.SetNeighbor(HexDirection.W, cells[i - 1]);
@@ -474,7 +476,7 @@ public class HexGrid : MonoBehaviour
             {
                 HexCell neighbor = current.GetNeighbor(d);
                 // skip null or already calculated neighbor
-                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
+                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase || !neighbor.Explorable)
                 {
                     continue;
                 }

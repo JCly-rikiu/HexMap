@@ -324,7 +324,7 @@ public class HexCell : MonoBehaviour
     {
         get
         {
-            return visibility > 0;
+            return visibility > 0 && Explorable;
         }
     }
     int visibility;
@@ -346,7 +346,18 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    public bool IsExplored { get; private set; }
+    public bool IsExplored
+    {
+        get
+        {
+            return explored && Explorable;
+        }
+        private set
+        {
+            explored = value;
+        }
+    }
+    bool explored;
 
     public int ViewElevation
     {
@@ -355,6 +366,8 @@ public class HexCell : MonoBehaviour
             return elevation >= waterLevel ? elevation : waterLevel;
         }
     }
+
+    public bool Explorable { get; set; }
 
     void Refresh()
     {
