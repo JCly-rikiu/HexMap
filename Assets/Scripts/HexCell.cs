@@ -35,7 +35,12 @@ public class HexCell : MonoBehaviour
                 return;
             }
 
+            int originalViewElevation = ViewElevation;
             elevation = value;
+            if (ViewElevation != originalViewElevation)
+            {
+                ShaderData.ViewElevationChanged();
+            }
             RefreshPosition();
 
             ValidateRivers();
@@ -173,8 +178,15 @@ public class HexCell : MonoBehaviour
             {
                 return;
             }
+
+            int originalViewElevation = ViewElevation;
             waterLevel = value;
+            if (ViewElevation != originalViewElevation)
+            {
+                ShaderData.ViewElevationChanged();
+            }
             ValidateRivers();
+
             Refresh();
         }
     }
@@ -335,6 +347,14 @@ public class HexCell : MonoBehaviour
     }
 
     public bool IsExplored { get; private set; }
+
+    public int ViewElevation
+    {
+        get
+        {
+            return elevation >= waterLevel ? elevation : waterLevel;
+        }
+    }
 
     void Refresh()
     {
@@ -628,5 +648,14 @@ public class HexCell : MonoBehaviour
     {
         UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
         label.text = text;
+    }
+
+    public void ResetVisibility()
+    {
+        if (visibility > 0)
+        {
+            visibility = 0;
+            ShaderData.RefreshVisibility(this);
+        }
     }
 }

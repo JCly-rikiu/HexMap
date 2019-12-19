@@ -6,12 +6,22 @@ public class HexCellShaderData : MonoBehaviour
     Texture2D cellTexture;
     Color32[] cellTextureData;
 
+    public HexGrid Grid { get; set; }
+
     List<HexCell> transitioningCells = new List<HexCell>();
     const float transitionSpeed = 255f;
     public bool ImmediateMode { get; set; }
 
+    bool needsVisibilityReset;
+
     void LateUpdate()
     {
+        if (needsVisibilityReset)
+        {
+            needsVisibilityReset = false;
+            Grid.ResetVisibility();
+        }
+
         int delta = (int)(Time.deltaTime * transitionSpeed);
         if (delta == 0)
         {
@@ -123,5 +133,11 @@ public class HexCellShaderData : MonoBehaviour
         }
         cellTextureData[index] = data;
         return stillUpdating;
+    }
+
+    public void ViewElevationChanged()
+    {
+        needsVisibilityReset = true;
+        enabled = true;
     }
 }
