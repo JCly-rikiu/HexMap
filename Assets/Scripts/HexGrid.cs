@@ -124,7 +124,7 @@ public class HexGrid : MonoBehaviour
 
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
         cell.transform.localPosition = position;
-        cell.coordinates = HexCoordinates.FromOffsetCorrdinates(x, z);
+        cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Index = i;
         cell.ShaderData = cellShaderData;
 

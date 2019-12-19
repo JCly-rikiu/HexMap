@@ -16,7 +16,7 @@ public struct HexCoordinates
         this.z = z;
     }
 
-    public static HexCoordinates FromOffsetCorrdinates(int x, int z)
+    public static HexCoordinates FromOffsetCoordinates(int x, int z)
     {
         return new HexCoordinates(x - z / 2, z);
     }
