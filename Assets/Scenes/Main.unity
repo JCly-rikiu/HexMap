@@ -10809,6 +10809,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 136169939}
+  jitterProbability: 0.25
+  chunkSizeMin: 30
+  chunkSizeMax: 100
+  landPercentage: 50
 --- !u!4 &1385391995
 Transform:
   m_ObjectHideFlags: 0
