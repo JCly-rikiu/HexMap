@@ -20,6 +20,14 @@ public class HexMapGenerator : MonoBehaviour
     public int landPercentage = 50;
     [Range(1, 5)]
     public int waterLevel = 3;
+    [Range(0f, 1f)]
+    public float highRiseProbability = 0.25f;
+    [Range(0f, 0.4f)]
+    public float sinkProbability = 0.2f;
+    [Range(-4, 0)]
+    public int elevationMinimum = -2;
+    [Range(6, 10)]
+    public int elevationMaximum = 8;
 
     public void GenerateMap(int x, int z)
     {
@@ -49,7 +57,15 @@ public class HexMapGenerator : MonoBehaviour
         int landBudget = Mathf.RoundToInt(cellCount * landPercentage * 0.01f);
         while (landBudget > 0)
         {
-            landBudget = RaiseTerrain(Random.Range(chunkSizeMin, chunkSizeMax + 1), landBudget);
+            int chunkSize = Random.Range(chunkSizeMin, chunkSizeMax + 1);
+            if (Random.value < sinkProbability)
+            {
+                landBudget = SinkTerrain(chunkSize, landBudget);
+            }
+            else
+            {
+                landBudget = RaiseTerrain(chunkSize, landBudget);
+            }
         }
     }
 
@@ -64,14 +80,67 @@ public class HexMapGenerator : MonoBehaviour
         searchFrontier.Enqueue(firstCell);
         HexCoordinates center = firstCell.coordinates;
 
+        int rise = Random.value < highRiseProbability ? 2 : 1;
         int size = 0;
         while (size < chunkSize && searchFrontier.Count > 0)
         {
             HexCell current = searchFrontier.Dequeue();
-            current.Elevation += 1;
-            if (current.Elevation == waterLevel && --budget == 0)
+            int originalElevation = current.Elevation;
+            int newElevation = originalElevation + rise;
+            if (newElevation > elevationMaximum)
+            {
+                continue;
+            }
+            current.Elevation = newElevation;
+            if (originalElevation < waterLevel && newElevation >= waterLevel && --budget == 0)
             {
                 break;
+            }
+            size += 1;
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor && neighbor.SearchPhase < searchFrontierPhase)
+                {
+                    neighbor.SearchPhase = searchFrontierPhase;
+                    neighbor.Distance = neighbor.coordinates.DistanceTo(center);
+                    neighbor.SearchHeuristic = Random.value < jitterProbability ? 1 : 0;
+                    searchFrontier.Enqueue(neighbor);
+                }
+            }
+        }
+        searchFrontier.Clear();
+
+        return budget;
+    }
+
+    int SinkTerrain(int chunkSize, int budget)
+    {
+        searchFrontierPhase += 1;
+
+        HexCell firstCell = GetRandomCell();
+        firstCell.SearchPhase = searchFrontierPhase;
+        firstCell.Distance = 0;
+        firstCell.SearchHeuristic = 0;
+        searchFrontier.Enqueue(firstCell);
+        HexCoordinates center = firstCell.coordinates;
+
+        int sink = Random.value < highRiseProbability ? 2 : 1;
+        int size = 0;
+        while (size < chunkSize && searchFrontier.Count > 0)
+        {
+            HexCell current = searchFrontier.Dequeue();
+            int originalElevation = current.Elevation;
+            int newElevation = originalElevation - sink;
+            if (newElevation < elevationMinimum)
+            {
+                continue;
+            }
+            current.Elevation = newElevation;
+            if (originalElevation >= waterLevel && newElevation < waterLevel)
+            {
+                budget += 1;
             }
             size += 1;
 
