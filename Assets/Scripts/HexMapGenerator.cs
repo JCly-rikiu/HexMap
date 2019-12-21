@@ -9,6 +9,7 @@ public class HexMapGenerator : MonoBehaviour
     public bool useFixedSeed;
 
     int cellCount;
+    int xMin, xMax, zMin, zMax;
 
     HexCellPriorityQueue searchFrontier;
     int searchFrontierPhase;
@@ -31,6 +32,10 @@ public class HexMapGenerator : MonoBehaviour
     public int elevationMinimum = -2;
     [Range(6, 10)]
     public int elevationMaximum = 8;
+    [Range(0, 10)]
+    public int mapBorderX = 5;
+    [Range(0, 10)]
+    public int mapBorderZ = 5;
 
     public void GenerateMap(int x, int z)
     {
@@ -56,6 +61,11 @@ public class HexMapGenerator : MonoBehaviour
             grid.GetCell(i).WaterLevel = waterLevel;
         }
 
+        xMin = mapBorderX;
+        xMax = x - mapBorderX;
+        zMin = mapBorderZ;
+        zMax = z - mapBorderZ;
+
         CreateLand();
         SetTerrainType();
 
@@ -70,7 +80,7 @@ public class HexMapGenerator : MonoBehaviour
     void CreateLand()
     {
         int landBudget = Mathf.RoundToInt(cellCount * landPercentage * 0.01f);
-        while (landBudget > 0)
+        for (int guard = 0; landBudget > 0 && guard < 10000; guard++)
         {
             int chunkSize = Random.Range(chunkSizeMin, chunkSizeMax + 1);
             if (Random.value < sinkProbability)
@@ -81,6 +91,11 @@ public class HexMapGenerator : MonoBehaviour
             {
                 landBudget = RaiseTerrain(chunkSize, landBudget);
             }
+        }
+
+        if (landBudget > 0)
+        {
+            Debug.LogWarning("Failed to use up " + landBudget + " land budget.");
         }
     }
 
@@ -178,7 +193,7 @@ public class HexMapGenerator : MonoBehaviour
 
     HexCell GetRandomCell()
     {
-        return grid.GetCell(Random.Range(0, cellCount));
+        return grid.GetCell(Random.Range(xMin, xMax), Random.Range(zMin, zMax));
     }
 
     void SetTerrainType()
