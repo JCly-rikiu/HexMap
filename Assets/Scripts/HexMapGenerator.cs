@@ -5,6 +5,9 @@ public class HexMapGenerator : MonoBehaviour
 {
     public HexGrid grid;
 
+    public int seed;
+    public bool useFixedSeed;
+
     int cellCount;
 
     HexCellPriorityQueue searchFrontier;
@@ -31,6 +34,16 @@ public class HexMapGenerator : MonoBehaviour
 
     public void GenerateMap(int x, int z)
     {
+        Random.State originalRandomState = Random.state;
+        if (!useFixedSeed)
+        {
+            seed = Random.Range(0, int.MaxValue);
+            seed ^= (int)System.DateTime.Now.Ticks;
+            seed ^= (int)Time.unscaledTime;
+            seed &= int.MaxValue;
+        }
+        Random.InitState(seed);
+
         cellCount = x * z;
         grid.CreateMap(x, z);
         if (searchFrontier == null)
@@ -50,6 +63,8 @@ public class HexMapGenerator : MonoBehaviour
         {
             grid.GetCell(i).SearchPhase = 0;
         }
+
+        Random.state = originalRandomState;
     }
 
     void CreateLand()
