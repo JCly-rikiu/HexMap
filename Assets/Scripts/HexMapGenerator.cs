@@ -8,7 +8,7 @@ public class HexMapGenerator : MonoBehaviour
     public int seed;
     public bool useFixedSeed;
 
-    int cellCount;
+    int cellCount, landCells;
 
     struct MapRegion
     {
@@ -22,6 +22,8 @@ public class HexMapGenerator : MonoBehaviour
     }
     List<ClimateData> climate = new List<ClimateData>();
     List<ClimateData> nextClimate = new List<ClimateData>();
+
+    List<HexDirection> flowDirections = new List<HexDirection>();
 
     HexCellPriorityQueue searchFrontier;
     int searchFrontierPhase;
@@ -68,6 +70,10 @@ public class HexMapGenerator : MonoBehaviour
     public float windStrength = 4f;
     [Range(0f, 1f)]
     public float startingMoisture = 0.1f;
+    [Range(0, 20)]
+    public int riverPercentage = 10;
+    [Range(0f, 1f)]
+    public float extraLakeProbability = 0.25f;
 
     public void GenerateMap(int x, int z)
     {
@@ -97,6 +103,7 @@ public class HexMapGenerator : MonoBehaviour
         CreateLand();
         ErodeLand();
         CreateClimate();
+        CreateRivers();
         SetTerrainType();
 
         for (int i = 0; i < cellCount; i++)
@@ -187,6 +194,7 @@ public class HexMapGenerator : MonoBehaviour
     void CreateLand()
     {
         int landBudget = Mathf.RoundToInt(cellCount * landPercentage * 0.01f);
+        landCells = landBudget;
         for (int guard = 0; guard < 10000; guard++)
         {
             bool sink = Random.value < sinkProbability;
@@ -212,6 +220,7 @@ public class HexMapGenerator : MonoBehaviour
         if (landBudget > 0)
         {
             Debug.LogWarning("Failed to use up " + landBudget + " land budget.");
+            landBudget -= landBudget;
         }
     }
 
@@ -500,6 +509,156 @@ public class HexMapGenerator : MonoBehaviour
         climate[cellIndex] = new ClimateData();
     }
 
+    void CreateRivers()
+    {
+        List<HexCell> riverOrigins = ListPool<HexCell>.Get();
+        for (int i = 0; i < cellCount; i++)
+        {
+            HexCell cell = grid.GetCell(i);
+            if (cell.IsUnderwater)
+            {
+                continue;
+            }
+            ClimateData data = climate[i];
+            float weight = data.moisture * (float)(cell.Elevation - waterLevel) / (elevationMaximum - waterLevel);
+            if (weight > 0.75f)
+            {
+                riverOrigins.Add(cell);
+                riverOrigins.Add(cell);
+            }
+            if (weight > 0.5f)
+            {
+                riverOrigins.Add(cell);
+            }
+            if (weight > 0.25f)
+            {
+                riverOrigins.Add(cell);
+            }
+        }
+
+        int riverBudget = Mathf.RoundToInt(landCells * riverPercentage * 0.01f);
+        while (riverBudget > 0 && riverOrigins.Count > 0)
+        {
+            int index = Random.Range(0, riverOrigins.Count);
+            int lastIndex = riverOrigins.Count - 1;
+            HexCell origin = riverOrigins[index];
+            riverOrigins[index] = riverOrigins[lastIndex];
+            riverOrigins.RemoveAt(lastIndex);
+
+            if (!origin.HasRiver)
+            {
+                bool isValidOrigin = true;
+                for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+                {
+                    HexCell neighbor = origin.GetNeighbor(d);
+                    if (neighbor && (neighbor.HasRiver || neighbor.IsUnderwater))
+                    {
+                        isValidOrigin = false;
+                        break;
+                    }
+                }
+                if (isValidOrigin)
+                {
+                    riverBudget -= CreateRiver(origin);
+                }
+            }
+        }
+
+        if (riverBudget > 0)
+        {
+            Debug.LogWarning("Failed to use up river budget.");
+        }
+
+        ListPool<HexCell>.Add(riverOrigins);
+    }
+
+    int CreateRiver(HexCell origin)
+    {
+        int length = 1;
+        HexCell cell = origin;
+        HexDirection direction = HexDirection.NE;
+        while (!cell.IsUnderwater)
+        {
+            int minNeighborElevation = int.MaxValue;
+            flowDirections.Clear();
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = cell.GetNeighbor(d);
+                if (!neighbor)
+                {
+                    continue;
+                }
+
+                if (neighbor.Elevation < minNeighborElevation)
+                {
+                    minNeighborElevation = neighbor.Elevation;
+                }
+
+                if (neighbor == origin || neighbor.HasIncomingRiver)
+                {
+                    continue;
+                }
+
+                int delta = neighbor.Elevation - cell.Elevation;
+                if (delta > 0)
+                {
+                    continue;
+                }
+
+                if (neighbor.HasOutgoingRiver)
+                {
+                    cell.SetOutgoingRiver(d);
+                    return length;
+                }
+
+                if (delta < 0)
+                {
+                    flowDirections.Add(d);
+                    flowDirections.Add(d);
+                    flowDirections.Add(d);
+                }
+
+                if (length == 1 || (d != direction.Next2() && d != direction.Previous2()))
+                {
+                    flowDirections.Add(d);
+                }
+
+                flowDirections.Add(d);
+            }
+
+            if (flowDirections.Count == 0)
+            {
+                if (length == 1)
+                {
+                    return 0;
+                }
+
+                if (minNeighborElevation >= cell.Elevation)
+                {
+                    cell.WaterLevel = minNeighborElevation;
+                    if (minNeighborElevation == cell.Elevation)
+                    {
+                        cell.Elevation = minNeighborElevation - 1;
+                    }
+                }
+                break;
+            }
+
+            direction = flowDirections[Random.Range(0, flowDirections.Count)];
+            cell.SetOutgoingRiver(direction);
+            length += 1;
+
+            if (minNeighborElevation >= cell.Elevation && Random.value < extraLakeProbability)
+            {
+                cell.WaterLevel = cell.Elevation;
+                cell.Elevation -= 1;
+            }
+
+            cell = cell.GetNeighbor(direction);
+        }
+        return length;
+    }
+
     void SetTerrainType()
     {
         for (int i = 0; i < cellCount; i++)
@@ -533,8 +692,6 @@ public class HexMapGenerator : MonoBehaviour
             {
                 cell.TerrainTypeIndex = 2;
             }
-
-            cell.SetMapData(moisture);
         }
     }
 }
