@@ -94,7 +94,6 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0f, 1f)]
     public float seepageFactor = 0.125f;
     public HexDirection windDirection = HexDirection.NW;
-
     [Range(1f, 10f)]
     public float windStrength = 4f;
     [Range(0f, 1f)]

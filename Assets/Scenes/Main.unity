@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028377, g: 0.22571409, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10811,6 +10811,7 @@ MonoBehaviour:
   grid: {fileID: 136169939}
   seed: 0
   useFixedSeed: 0
+  hemisphere: 0
   jitterProbability: 0.25
   chunkSizeMin: 30
   chunkSizeMax: 100
@@ -10823,6 +10824,20 @@ MonoBehaviour:
   mapBorderX: 5
   mapBorderZ: 5
   regionBorder: 5
+  regionCount: 1
+  erosionPercentage: 50
+  evaporationFactor: 0.5
+  precipitationFactor: 0.25
+  runoffFactor: 0.25
+  seepageFactor: 0.125
+  windDirection: 5
+  windStrength: 4
+  startingMoisture: 0.1
+  riverPercentage: 10
+  extraLakeProbability: 0.25
+  lowTemperature: 0
+  highTemperature: 1
+  temperatureJitter: 0.1
 --- !u!4 &1385391995
 Transform:
   m_ObjectHideFlags: 0
