@@ -109,7 +109,7 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0f, 1f)]
     public float temperatureJitter = 0.1f;
 
-    public void GenerateMap(int x, int z)
+    public void GenerateMap(int x, int z, bool wrapping)
     {
         Random.State originalRandomState = Random.state;
         if (!useFixedSeed)
@@ -122,7 +122,7 @@ public class HexMapGenerator : MonoBehaviour
         Random.InitState(seed);
 
         cellCount = x * z;
-        grid.CreateMap(x, z);
+        grid.CreateMap(x, z, wrapping);
         if (searchFrontier == null)
         {
             searchFrontier = new HexCellPriorityQueue();

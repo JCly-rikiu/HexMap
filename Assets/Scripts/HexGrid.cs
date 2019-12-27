@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class HexGrid : MonoBehaviour
 {
+    public Image[] images;
     public int cellCountX = 20, cellCountZ = 15;
     int chunkCountX, chunkCountZ;
 
@@ -37,6 +38,8 @@ public class HexGrid : MonoBehaviour
     }
     bool currentPathExists;
 
+    public bool wrapping;
+
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
@@ -45,7 +48,7 @@ public class HexGrid : MonoBehaviour
 
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         cellShaderData.Grid = this;
-        CreateMap(cellCountX, cellCountZ);
+        CreateMap(cellCountX, cellCountZ, wrapping);
     }
 
     void onEnable()
@@ -55,11 +58,12 @@ public class HexGrid : MonoBehaviour
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
             HexUnit.unitPrefab = unitPrefab;
+            HexMetrics.wrapSize = wrapping ? cellCountX : 0;
             ResetVisibility();
         }
     }
 
-    public bool CreateMap(int x, int z)
+    public bool CreateMap(int x, int z, bool wrapping)
     {
         if (x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0)
         {
@@ -81,6 +85,9 @@ public class HexGrid : MonoBehaviour
         cellCountZ = z;
         chunkCountX = cellCountX / HexMetrics.chunkSizeX;
         chunkCountZ = cellCountZ / HexMetrics.chunkSizeZ;
+
+        this.wrapping = wrapping;
+        HexMetrics.wrapSize = wrapping ? cellCountX : 0;
 
         cellShaderData.Initialize(cellCountX, cellCountZ);
         CreateChunks();
@@ -118,7 +125,7 @@ public class HexGrid : MonoBehaviour
     void CreateCell(int x, int z, int i)
     {
         Vector3 position;
-        position.x = (x + z * 0.5f - z / 2) * (HexMetrics.innerRadius * 2f);
+        position.x = (x + z * 0.5f - z / 2) * HexMetrics.innerDiameter;
         position.y = 0f;
         position.z = z * (HexMetrics.outerRadius * 1.5f);
 
@@ -226,6 +233,7 @@ public class HexGrid : MonoBehaviour
     {
         writer.Write(cellCountX);
         writer.Write(cellCountZ);
+        writer.Write(wrapping);
 
         for (int i = 0; i < cells.Length; i++)
         {
@@ -250,9 +258,10 @@ public class HexGrid : MonoBehaviour
             x = reader.ReadInt32();
             z = reader.ReadInt32();
         }
-        if (x != cellCountX || z != cellCountZ)
+        bool wrapping = header >= 5 ? reader.ReadBoolean() : false;
+        if (x != cellCountX || z != cellCountZ || this.wrapping != wrapping)
         {
-            if (!CreateMap(x, z))
+            if (!CreateMap(x, z, wrapping))
             {
                 return;
             }

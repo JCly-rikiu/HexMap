@@ -95,7 +95,7 @@ public class HexMapCamera : MonoBehaviour
 
     Vector3 ClampPosition(Vector3 position)
     {
-        float xMax = (grid.cellCountX - 0.5f) * (2f * HexMetrics.innerRadius);
+        float xMax = (grid.cellCountX - 0.5f) * HexMetrics.innerDiameter;
         position.x = Mathf.Clamp(position.x, 0f, xMax);
 
         float zMax = (grid.cellCountZ - 1) * (1.5f * HexMetrics.outerRadius);

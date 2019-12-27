@@ -6,6 +6,7 @@ public static class HexMetrics
     public const float innerToOuter = 1f / outerToInner;
     public const float outerRadius = 10f;
     public const float innerRadius = outerRadius * outerToInner;
+    public const float innerDiameter = innerRadius * 2f;
 
     public const float solidFactor = 0.8f;
     public const float blendFactor = 1f - solidFactor;
@@ -39,6 +40,15 @@ public static class HexMetrics
     public const int hashGridSize = 256;
     public const float hashGridScale = 0.25f;
     static HexHash[] hashGrid;
+
+    public static bool Wrapping
+    {
+        get
+        {
+            return wrapSize > 0;
+        }
+    }
+    public static int wrapSize;
 
     static Vector3[] corners = {
         new Vector3(0f, 0f, outerRadius),
