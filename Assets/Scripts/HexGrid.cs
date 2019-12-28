@@ -10,6 +10,8 @@ public class HexGrid : MonoBehaviour
     public int cellCountX = 20, cellCountZ = 15;
     int chunkCountX, chunkCountZ;
 
+    Transform[] columns;
+
     public HexCell cellPrefab;
     public Text cellLabelPrefab;
     public HexGridChunk chunkPrefab;
@@ -39,6 +41,7 @@ public class HexGrid : MonoBehaviour
     bool currentPathExists;
 
     public bool wrapping;
+    int currentCenterColumnIndex = -1;
 
     void Awake()
     {
@@ -73,11 +76,11 @@ public class HexGrid : MonoBehaviour
 
         ClearPath();
         ClearUnits();
-        if (chunks != null)
+        if (columns != null)
         {
-            for (int i = 0; i < chunks.Length; i++)
+            for (int i = 0; i < columns.Length; i++)
             {
-                Destroy(chunks[i].gameObject);
+                Destroy(columns[i].gameObject);
             }
         }
 
@@ -87,6 +90,7 @@ public class HexGrid : MonoBehaviour
         chunkCountZ = cellCountZ / HexMetrics.chunkSizeZ;
 
         this.wrapping = wrapping;
+        currentCenterColumnIndex = -1;
         HexMetrics.wrapSize = wrapping ? cellCountX : 0;
 
         cellShaderData.Initialize(cellCountX, cellCountZ);
@@ -96,8 +100,48 @@ public class HexGrid : MonoBehaviour
         return true;
     }
 
+    public void CenterMap(float xPosition)
+    {
+        int centerColumnIndex = (int)(xPosition / (HexMetrics.innerDiameter * HexMetrics.chunkSizeX));
+
+        if (centerColumnIndex == currentCenterColumnIndex)
+        {
+            return;
+        }
+        currentCenterColumnIndex = centerColumnIndex;
+
+        int minColumnIndex = centerColumnIndex - chunkCountX / 2;
+        int maxColumnIndex = centerColumnIndex + chunkCountX / 2;
+
+        Vector3 position;
+        position.y = position.z = 0f;
+        for (int i = 0; i < columns.Length; i++)
+        {
+            if (i < minColumnIndex)
+            {
+                position.x = chunkCountX * (HexMetrics.innerDiameter * HexMetrics.chunkSizeX);
+            }
+            else if (i > maxColumnIndex)
+            {
+                position.x = chunkCountX * -(HexMetrics.innerDiameter * HexMetrics.chunkSizeX);
+            }
+            else
+            {
+                position.x = 0f;
+            }
+            columns[i].localPosition = position;
+        }
+    }
+
     void CreateChunks()
     {
+        columns = new Transform[chunkCountX];
+        for (int x = 0; x < chunkCountX; x++)
+        {
+            columns[x] = new GameObject("Column").transform;
+            columns[x].SetParent(transform, false);
+        }
+
         chunks = new HexGridChunk[chunkCountX * chunkCountZ];
 
         for (int z = 0, i = 0; z < chunkCountZ; z++)
@@ -105,7 +149,7 @@ public class HexGrid : MonoBehaviour
             for (int x = 0; x < chunkCountX; x++)
             {
                 HexGridChunk chunk = chunks[i++] = Instantiate(chunkPrefab);
-                chunk.transform.SetParent(transform);
+                chunk.transform.SetParent(columns[x], false);
             }
         }
     }
@@ -355,7 +399,7 @@ public class HexGrid : MonoBehaviour
 
                 // update distance
                 int distance = current.Distance + moveCost;
-                int turn = (distance - 1)/ speed;
+                int turn = (distance - 1) / speed;
                 if (turn > currentTurn)
                 {
                     distance = turn * speed + moveCost;

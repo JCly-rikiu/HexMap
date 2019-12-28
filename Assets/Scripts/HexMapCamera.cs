@@ -35,6 +35,12 @@ public class HexMapCamera : MonoBehaviour
         stick = swivel.GetChild(0);
     }
 
+    void OnEnable()
+    {
+        instance = this;
+        ValidatePosition();
+    }
+
     void Update()
     {
         float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
@@ -90,7 +96,26 @@ public class HexMapCamera : MonoBehaviour
 
         Vector3 position = transform.localPosition;
         position += direction * distance;
-        transform.localPosition = ClampPosition(position);
+        transform.localPosition = grid.wrapping ? WrapPosition(position) : ClampPosition(position);
+    }
+
+    Vector3 WrapPosition(Vector3 position)
+    {
+        float width = grid.cellCountX * HexMetrics.innerDiameter;
+        while (position.x < 0f)
+        {
+            position.x += width;
+        }
+        while (position.x > width)
+        {
+            position.x -= width;
+        }
+
+        float zMax = (grid.cellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+        position.z = Mathf.Clamp(position.z, 0f, zMax);
+
+        grid.CenterMap(position.x);
+        return position;
     }
 
     Vector3 ClampPosition(Vector3 position)
